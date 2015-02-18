@@ -7,10 +7,50 @@
 //
 
 #import "ImagesTableViewController.h"
+#import "DataSource.h"
+#import "Media.h"
+#import "User.h"
+#import "Comment.h"
 
 @implementation ImagesTableViewController
 
 #pragma mark - Table view data source
+
+
+- (id)initWithStyle:(UITableViewStyle)style
+{
+    self = [super initWithStyle:style];
+    if(self) {
+        //custom initialization
+        //        self.images = [NSMutableArray array];
+    }
+    return self;
+}
+
+
+- (void)viewDidLoad
+{
+    [super viewDidLoad];
+    
+    //    for (int i = 1; i <=10; i++) {
+    //        NSString *imageName = [NSString stringWithFormat:@"%d.jpg", i];
+    //        UIImage *image = [UIImage imageNamed:imageName];
+    //        if (image) {
+    //            [self.images addObject:image];
+    //        }
+    //    }
+    
+    
+    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"imageCell"];
+    
+}
+
+
+-(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
+    //    return self.images.count;
+    return [self items].count;
+    
+}
 
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
@@ -33,75 +73,60 @@
         [cell.contentView addSubview:imageView];
     }
     
-    UIImage *image = self.images[indexPath.row];
-    imageView.image = image;
+//    UIImage *image = self.images[indexPath.row];
+//    imageView.image = image;
+    Media *item = [self items][indexPath.row];
+    imageView.image = item.image;
+    
     
     return cell;
 }
 
--(NSInteger)tableView:(UITableView *)tableView numberOfRowsInSection:(NSInteger)section {
-    return self.images.count;
-}
+
 
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
-    UIImage *image = self.images[indexPath.row];
+//    UIImage *image = self.images[indexPath.row];
+    Media *item = [self items][indexPath.row];
+    UIImage *image = item.image;
+    
+    
     return (CGRectGetWidth(self.view.frame) / image.size.width) * image.size.height;
 }
 
-- (id)initWithStyle:(UITableViewStyle)style
-{
-    self = [super initWithStyle:style];
-    if(self) {
-        //custom initialization
-        self.images = [NSMutableArray array];
-    }
-    return self;
-}
 
--(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-    //return YES- to be able to delete all rows
-    return YES;
-}
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-    //handles delete action, may need revision of not only delete but has other options- like share or something.
-    if (editingStyle == UITableViewCellEditingStyleDelete) {
-        
-        NSMutableArray *work_array = [NSMutableArray arrayWithArray:self.images];
-        [work_array removeObjectAtIndex:indexPath.row];
-        self.images = [NSMutableArray arrayWithArray:work_array];
-//        [[NSUserDefaults standardUserDefaults] setObject:self.images forKey:<#(NSString *)#>]
-        //update View
-        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-        
-        
-    }
-    
-    NSLog(@"Deleted row.");
-    [self.tableView reloadData];
-}
+//-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+//    //return YES- to be able to delete all rows
+//    return YES;
+//}
+//
+//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+//    //handles delete action, may need revision of not only delete but has other options- like share or something.
+//    if (editingStyle == UITableViewCellEditingStyleDelete) {
+//        
+//        NSMutableArray *work_array = [NSMutableArray arrayWithArray:[self items]];
+//        [work_array removeObjectAtIndex:indexPath.row];
+//        self.images = [NSMutableArray arrayWithArray:work_array];
+////        [[NSUserDefaults standardUserDefaults] setObject:self.images forKey:<#(NSString *)#>]
+//        //update View
+//        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
+//        
+//        
+//    }
+//    
+//    NSLog(@"Deleted row.");
+//    [self.tableView reloadData];
+//}
 
 -(void)removeObjectFromImagesAtIndex:(NSUInteger)index {
     
 }
 
-
-
-- (void)viewDidLoad
-{
-    [super viewDidLoad];
-    
-    for (int i = 1; i <=10; i++) {
-        NSString *imageName = [NSString stringWithFormat:@"%d.jpg", i];
-        UIImage *image = [UIImage imageNamed:imageName];
-        if (image) {
-            [self.images addObject:image];
-        }
-    }
-    
-    
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"imageCell"];
-    
+-(NSArray *) items {
+    return [DataSource sharedInstance].mediaItems;
 }
+
+
+
 
 @end
