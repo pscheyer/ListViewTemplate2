@@ -13,6 +13,6 @@
 +(instancetype) sharedInstance;
 @property (nonatomic, strong, readonly) NSArray *mediaItems;
 
-- (void) removeDataAtRow:(NSUInteger) row;
+//- (void) removeDataAtRow:(NSUInteger) row;
 
 @end
