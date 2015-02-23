@@ -11,6 +11,7 @@
 #import "Media.h"
 #import "User.h"
 #import "Comment.h"
+#import "MediaTableViewCell.h"
 
 @implementation ImagesTableViewController
 
@@ -19,6 +20,9 @@
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
+    
+    NSMutableArray *work_array = [[NSMutableArray alloc] initWithArray:[DataSource sharedInstance].mediaItems];
+    _item = work_array;
     self = [super initWithStyle:style];
     if(self) {
         //custom initialization
@@ -41,7 +45,7 @@
     //    }
     
     
-    [self.tableView registerClass:[UITableViewCell class] forCellReuseIdentifier:@"imageCell"];
+    [self.tableView registerClass:[MediaTableViewCell class] forCellReuseIdentifier:@"mediaCell"];
     
 }
 
@@ -55,29 +59,32 @@
 
 - (UITableViewCell *)tableView:(UITableView *)tableView cellForRowAtIndexPath:(NSIndexPath *)indexPath
 {
-    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"imageCell" forIndexPath:indexPath];
+    //Original build w/o MediaTableViewCell- just displays images, requires other changes in tableView return and elsewhere.
+//    UITableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"imageCell" forIndexPath:indexPath];
+//    
+//    //configure the cell
+//    static NSInteger imageViewTag = 1234;
+//    UIImageView *imageView = (UIImageView*)[cell.contentView viewWithTag:imageViewTag];
+//    
+//    if (!imageView) {
+//        //this is a new cell, doesn't have an imageview yet
+//        imageView = [[UIImageView alloc] init];
+//        imageView.contentMode = UIViewContentModeScaleToFill;
+//        
+//        imageView.frame = cell.contentView.bounds;
+//        imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
+//        
+//        imageView.tag = imageViewTag;
+//        [cell.contentView addSubview:imageView];
+//    }
+//    
+////    UIImage *image = self.images[indexPath.row];
+////    imageView.image = image;
+//    Media *item = [self items][indexPath.row];
+//    imageView.image = item.image;
     
-    //configure the cell
-    static NSInteger imageViewTag = 1234;
-    UIImageView *imageView = (UIImageView*)[cell.contentView viewWithTag:imageViewTag];
-    
-    if (!imageView) {
-        //this is a new cell, doesn't have an imageview yet
-        imageView = [[UIImageView alloc] init];
-        imageView.contentMode = UIViewContentModeScaleToFill;
-        
-        imageView.frame = cell.contentView.bounds;
-        imageView.autoresizingMask = UIViewAutoresizingFlexibleHeight | UIViewAutoresizingFlexibleWidth;
-        
-        imageView.tag = imageViewTag;
-        [cell.contentView addSubview:imageView];
-    }
-    
-//    UIImage *image = self.images[indexPath.row];
-//    imageView.image = image;
-    Media *item = [self items][indexPath.row];
-    imageView.image = item.image;
-    
+    MediaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mediaCell" forIndexPath:indexPath];
+    cell.mediaItem = [self items][indexPath.row];
     
     return cell;
 }
@@ -87,46 +94,43 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    UIImage *image = self.images[indexPath.row];
     Media *item = [self items][indexPath.row];
-    UIImage *image = item.image;
     
     
-    return (CGRectGetWidth(self.view.frame) / image.size.width) * image.size.height;
+    return [MediaTableViewCell heightForMediaItem:item width:CGRectGetWidth(self.view.frame)];
 }
 
 
 
-//-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-//    //return YES- to be able to delete all rows
-//    return YES;
-//}
-//
-//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-//    //handles delete action, may need revision of not only delete but has other options- like share or something.
-//    if (editingStyle == UITableViewCellEditingStyleDelete) {
-//        
-//        NSMutableArray *work_array = [NSMutableArray arrayWithArray:[self items]];
-//        [work_array removeObjectAtIndex:indexPath.row];
-//        self.images = [NSMutableArray arrayWithArray:work_array];
-////        [[NSUserDefaults standardUserDefaults] setObject:self.images forKey:<#(NSString *)#>]
-//        //update View
-//        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//        
-//        
-//    }
-//    
-//    NSLog(@"Deleted row.");
-//    [self.tableView reloadData];
-//}
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    //return YES- to be able to delete all rows
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    //handles delete action, may need revision of not only delete but has other options- like share or something.
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        NSMutableArray *work_array = [[NSMutableArray alloc] initWithArray:[self items]];
+        [work_array removeObjectAtIndex:indexPath.row];
+        _item= work_array;
+        //update View
+
+//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView reloadData];
+        
+    }
+    
+    NSLog(@"Deleted row.");
+
+}
 
 -(void)removeObjectFromImagesAtIndex:(NSUInteger)index {
     
 }
 
 -(NSArray *) items {
-    return [DataSource sharedInstance].mediaItems;
+    return _item;
 }
-
-
 
 
 @end
