@@ -112,4 +112,11 @@
     return [NSString stringWithString:s];
 }
 
+//- (void) removeDataAtRow:(NSUInteger) row {
+//    NSMutableArray *arrayWithoutMediaItem = [[NSMutableArray alloc] initWithArray:_mediaItems];
+//    [arrayWithoutMediaItem removeObjectAtIndex:row];
+//    
+//    self.mediaItems = arrayWithoutMediaItem;
+//}
+
 @end

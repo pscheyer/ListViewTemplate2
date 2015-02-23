@@ -30,7 +30,7 @@ static NSParagraphStyle *paragraphStyle;
 
 +(void)load {
     lightFont = [UIFont fontWithName:@"HelveticaNeue-Thin" size:11];
-    boldFont = [UIFont fontWithName:@"HelvetiaNeue-Bold" size:11];
+    boldFont = [UIFont fontWithName:@"HelveticaNeue-Bold" size:11];
     usernameLabelGray = [UIColor colorWithRed:0.933 green:0.933 blue:0.933 alpha:1]; //#eeeeee
     commentLabelGray = [UIColor colorWithRed:0.898 green:0.898 blue:0.898 alpha:1]; //#e5e5e5
     linkColor = [UIColor colorWithRed:0.345 green:0.314 blue:0.427 alpha:1]; //#58506d
@@ -133,11 +133,32 @@ static NSParagraphStyle *paragraphStyle;
 
 //set a new media item
 - (void) setMediaItem:(Media *)mediaItem {
-//    _mediaItem = mediaItem;
+    _mediaItem = mediaItem;
     self.mediaImageView.image = _mediaItem.image;
     self.usernameAndCaptionLabel.attributedText = [self usernameAndCaptionString];
     self.commentLabel.attributedText = [self commentString];
 }
+
+#pragma mark Row Height Calculations
+
++ (CGFloat) heightForMediaItem:(Media *)mediaItem width:(CGFloat)width {
+    //make a cell
+    MediaTableViewCell *layoutCell = [[MediaTableViewCell alloc] initWithStyle:UITableViewCellStyleDefault reuseIdentifier:@"layoutCell"];
+    
+    //set it to the given width and the max possible height
+    layoutCell.frame = CGRectMake(0, 0, width, CGFLOAT_MAX);
+    
+    //give it to the media item
+    layoutCell.mediaItem = mediaItem;
+    
+    //make it adjust the image view and labels
+    [layoutCell layoutSubviews];
+    
+    //height will be wherever the bottom of the comments label is
+    return CGRectGetMaxY(layoutCell.commentLabel.frame);
+}
+
+
 
 
 @end

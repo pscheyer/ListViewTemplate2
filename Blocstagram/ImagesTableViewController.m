@@ -20,6 +20,9 @@
 
 - (id)initWithStyle:(UITableViewStyle)style
 {
+    
+    NSMutableArray *work_array = [[NSMutableArray alloc] initWithArray:[DataSource sharedInstance].mediaItems];
+    _item = work_array;
     self = [super initWithStyle:style];
     if(self) {
         //custom initialization
@@ -81,7 +84,7 @@
 //    imageView.image = item.image;
     
     MediaTableViewCell *cell = [tableView dequeueReusableCellWithIdentifier:@"mediaCell" forIndexPath:indexPath];
-    cell.mediaItem = [DataSource sharedInstance].mediaItems[indexPath.row];
+    cell.mediaItem = [self items][indexPath.row];
     
     return cell;
 }
@@ -91,46 +94,43 @@
 - (CGFloat) tableView:(UITableView *)tableView heightForRowAtIndexPath:(NSIndexPath *)indexPath {
 //    UIImage *image = self.images[indexPath.row];
     Media *item = [self items][indexPath.row];
-    UIImage *image = item.image;
     
     
-    return 300 + (image.size.height / image.size.width * CGRectGetWidth(self.view.frame));
+    return [MediaTableViewCell heightForMediaItem:item width:CGRectGetWidth(self.view.frame)];
 }
 
 
 
-//-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
-//    //return YES- to be able to delete all rows
-//    return YES;
-//}
-//
-//- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
-//    //handles delete action, may need revision of not only delete but has other options- like share or something.
-//    if (editingStyle == UITableViewCellEditingStyleDelete) {
-//        
-//        NSMutableArray *work_array = [NSMutableArray arrayWithArray:[self items]];
-//        [work_array removeObjectAtIndex:indexPath.row];
-//        self.images = [NSMutableArray arrayWithArray:work_array];
-////        [[NSUserDefaults standardUserDefaults] setObject:self.images forKey:<#(NSString *)#>]
-//        //update View
-//        [tableView deleteRowsAtIndexPaths:[NSArray arrayWithObject:indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//        
-//        
-//    }
-//    
-//    NSLog(@"Deleted row.");
-//    [self.tableView reloadData];
-//}
+-(BOOL)tableView:(UITableView *)tableView canEditRowAtIndexPath:(NSIndexPath *)indexPath {
+    //return YES- to be able to delete all rows
+    return YES;
+}
+
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    //handles delete action, may need revision of not only delete but has other options- like share or something.
+    if (editingStyle == UITableViewCellEditingStyleDelete) {
+        
+        NSMutableArray *work_array = [[NSMutableArray alloc] initWithArray:[self items]];
+        [work_array removeObjectAtIndex:indexPath.row];
+        _item= work_array;
+        //update View
+
+//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+            [self.tableView reloadData];
+        
+    }
+    
+    NSLog(@"Deleted row.");
+
+}
 
 -(void)removeObjectFromImagesAtIndex:(NSUInteger)index {
     
 }
 
 -(NSArray *) items {
-    return [DataSource sharedInstance].mediaItems;
+    return _item;
 }
-
-
 
 
 @end
