@@ -169,7 +169,12 @@ static NSParagraphStyle *paragraphStyle;
     [layoutCell setNeedsLayout];
     [layoutCell layoutIfNeeded];
     
+    
+    
     //get the actual height required for the cell
+//    CGFloat outputHeight = CGRectGetMaxY(layoutCell.commentLabel.frame) + CGRectGetMaxY(layoutCell.usernameAndCaptionLabel.frame);
+//    return outputHeight;
+    
     return CGRectGetMaxY(layoutCell.commentLabel.frame);
 }
 
