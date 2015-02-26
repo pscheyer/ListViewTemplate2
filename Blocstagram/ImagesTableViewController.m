@@ -129,7 +129,7 @@
 }
 
 -(NSArray *) items {
-    return _item;
+    return [[DataSource sharedInstance] mediaItems];
 }
 
 #pragma mark Key-Value Observations
