@@ -17,6 +17,9 @@
 
 @property (nonatomic, strong) NSArray *mediaItems;
 
+@property (nonatomic, assign) BOOL isRefreshing; //like Sprite!
+@property (nonatomic, assign) BOOL isLoadingOlderItems; //like... our thing that was like sprite!
+
 @end
 
 @implementation DataSource
@@ -102,6 +105,23 @@
     return comment;
 }
 
+- (NSString *) randomSentenceWithMaximumNumberOfWords:(NSUInteger) len {
+    NSString *sentence = [[NSString alloc] init];
+    
+    NSUInteger wordCount = arc4random_uniform(20);
+    
+    NSMutableString *randomSentence = [[NSMutableString alloc] init];
+    
+    for (int i = 0; i <= wordCount; i++) {
+        NSString *randomWord = [self randomStringOfLength:arc4random_uniform(12)];
+        [randomSentence appendFormat:@"%@ ", randomWord];
+    }
+    
+    sentence = randomSentence;
+    
+    return sentence;
+}
+
 - (NSString *) randomStringOfLength:(NSUInteger) len {
     NSString *alphabet = @"abcdefghijklmnopqrstuvwxyz";
     
@@ -152,6 +172,46 @@
     NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
     [mutableArrayWithKVO removeObject:item];
 //    [_mediaItems removeObject:item];
+}
+
+#pragma mark pull-to-refresh and inifinite scroll
+
+- (void) requestNewItemsWithCompletionHandler:(NewItemCompletionBlock)completionHandler {
+    if (self.isRefreshing == NO) { //YOU HAVE YOUR SPRITE ALREADY, SIR
+        self.isRefreshing = YES;
+        Media *media = [[Media alloc] init];
+        media.user = [self randomUser];
+        media.image = [UIImage imageNamed:@"10.jpg"];
+        media.caption = [self randomSentenceWithMaximumNumberOfWords:7];
+        
+        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+        [mutableArrayWithKVO insertObject:media atIndex:0];
+        
+        self.isRefreshing = NO;
+        
+        if (completionHandler) {
+            completionHandler(nil);
+        }
+    }
+}
+
+- (void) requestOldItemsWithCompletionHandler:(NewItemCompletionBlock)completionHandler {
+    if (self.isLoadingOlderItems == NO) { //YOU HAVE YOUR THING SIMILAR TO OUR THING LIKE SPRITE ALREADY SIR DON'T PUSH ME
+        self.isLoadingOlderItems = YES;
+        Media *media = [[Media alloc] init];
+        media.user = [self randomUser];
+        media.image = [UIImage imageNamed:@"1.jpg"];
+        media.caption = [self randomSentenceWithMaximumNumberOfWords:7];
+        
+        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+        [mutableArrayWithKVO addObject:media];
+        
+        self.isLoadingOlderItems = NO;
+        
+        if (completionHandler) {
+            completionHandler(nil);
+        }
+    }
 }
 
 @end
