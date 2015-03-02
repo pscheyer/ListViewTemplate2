@@ -29,6 +29,7 @@
 		D384024E1A94C78500309D85 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = D384024D1A94C78500309D85 /* Comment.m */; };
 		D38402511A94C87D00309D85 /* DataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D38402501A94C87D00309D85 /* DataSource.m */; };
 		D3E4B6151A99F10400C8A89A /* MediaTableViewCell.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E4B6141A99F10400C8A89A /* MediaTableViewCell.m */; };
+		D3E4B6181AA2FB5800C8A89A /* LoginViewController.m in Sources */ = {isa = PBXBuildFile; fileRef = D3E4B6171AA2FB5800C8A89A /* LoginViewController.m */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXContainerItemProxy section */
@@ -76,6 +77,8 @@
 		D38402501A94C87D00309D85 /* DataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSource.m; sourceTree = "<group>"; };
 		D3E4B6131A99F10400C8A89A /* MediaTableViewCell.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; name = MediaTableViewCell.h; path = ../MediaTableViewCell.h; sourceTree = "<group>"; };
 		D3E4B6141A99F10400C8A89A /* MediaTableViewCell.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; name = MediaTableViewCell.m; path = ../MediaTableViewCell.m; sourceTree = "<group>"; };
+		D3E4B6161AA2FB5800C8A89A /* LoginViewController.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LoginViewController.h; sourceTree = "<group>"; };
+		D3E4B6171AA2FB5800C8A89A /* LoginViewController.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = LoginViewController.m; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -137,6 +140,8 @@
 				D384024D1A94C78500309D85 /* Comment.m */,
 				D384024F1A94C87D00309D85 /* DataSource.h */,
 				D38402501A94C87D00309D85 /* DataSource.m */,
+				D3E4B6161AA2FB5800C8A89A /* LoginViewController.h */,
+				D3E4B6171AA2FB5800C8A89A /* LoginViewController.m */,
 			);
 			path = Blocstagram;
 			sourceTree = "<group>";
@@ -297,6 +302,7 @@
 				D384024B1A94C5C500309D85 /* Media.m in Sources */,
 				D3E4B6151A99F10400C8A89A /* MediaTableViewCell.m in Sources */,
 				D38402511A94C87D00309D85 /* DataSource.m in Sources */,
+				D3E4B6181AA2FB5800C8A89A /* LoginViewController.m in Sources */,
 				D38402481A94C4B300309D85 /* User.m in Sources */,
 				D30888081A90EEF700B4C8A1 /* ImagesTableViewController.m in Sources */,
 				D30887D41A90E94600B4C8A1 /* ViewController.m in Sources */,
