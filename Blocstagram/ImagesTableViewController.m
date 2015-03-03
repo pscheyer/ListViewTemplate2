@@ -43,6 +43,7 @@
     
     [self.tableView registerClass:[MediaTableViewCell class] forCellReuseIdentifier:@"mediaCell"];
     
+    
 }
 
 - (void) refreshControlDidFire:(UIRefreshControl *) sender {
