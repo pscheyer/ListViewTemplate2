@@ -22,6 +22,7 @@
 @property (nonatomic, assign) BOOL isRefreshing; //like Sprite!
 @property (nonatomic, assign) BOOL isLoadingOlderItems; //like... our thing that was like sprite!
 @property (nonatomic, assign) BOOL thereAreNoMoreOlderMessages;
+@property (nonatomic, assign) BOOL thereIsNoDataForParameters;
 
 @end
 
@@ -100,10 +101,14 @@
 
 - (void) requestNewItemsWithCompletionHandler:(NewItemCompletionBlock)completionHandler {
     self.thereAreNoMoreOlderMessages = NO;
-    if (self.isRefreshing == NO) { //YOU HAVE YOUR SPRITE ALREADY, SIR
+    self.thereIsNoDataForParameters = [self checkDataForImages:self.mediaItems];
+
+    if (self.isRefreshing == NO && self.thereIsNoDataForParameters == NO) { //YOU HAVE YOUR SPRITE ALREADY, SIR
         self.isRefreshing = YES;
         
         NSString *minID = [[self.mediaItems firstObject] idNumber];
+        
+        
         NSDictionary *parameters = @{@"min_id": minID};
         
         [self populateDataWithParameters:parameters completionHandler:^(NSError *error) {
@@ -132,6 +137,16 @@
             }
         }];
     }
+}
+
+-(BOOL)checkDataForImages:(NSArray *)data {
+    if (data == nil) {
+            NSLog(@"NoData in images table");
+        return NO;
+    } else {
+        return YES;
+    }
+
 }
 
 - (void) populateDataWithParameters:(NSDictionary *)parameters completionHandler:(NewItemCompletionBlock)completionHandler {
@@ -196,6 +211,7 @@
         
         if (mediaItem) {
             [tmpMediaItems addObject:mediaItem];
+            //this next line procs the error requested in the assignment if commented and pull to refresh is run twice.
             [self downloadImageForMediaItem:mediaItem];
         }
     }
