@@ -125,22 +125,31 @@
     return YES;
 }
 
-- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+- (CGFloat) tableView:(UITableView *)tableView estimatedHeightForRowAtIndexPath:(NSIndexPath *)indexPath {
+    Media *item = [DataSource sharedInstance].mediaItems[indexPath.row];
+    if(item.image) {
+        return 350;
+    } else {
+        return 150;
+    }
+}
 
+- (void)tableView:(UITableView *)tableView commitEditingStyle:(UITableViewCellEditingStyle)editingStyle forRowAtIndexPath:(NSIndexPath *)indexPath {
+    
     
     if (editingStyle == UITableViewCellEditingStyleDelete) {
         
         Media *item = [DataSource sharedInstance].mediaItems[indexPath.row];
         [[DataSource sharedInstance] deleteMediaItem:item];
-//        _item = [DataSource sharedInstance].mediaItems;
+        //        _item = [DataSource sharedInstance].mediaItems;
         //
-//                NSMutableArray *work_array = [[NSMutableArray alloc] initWithArray:[self items]];
-//                [work_array removeObjectAtIndex:indexPath.row];
-//                _item= work_array;
-                //update View
+        //                NSMutableArray *work_array = [[NSMutableArray alloc] initWithArray:[self items]];
+        //                [work_array removeObjectAtIndex:indexPath.row];
+        //                _item= work_array;
+        //update View
         
-//        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
-//        [self.tableView reloadData];
+        //        [tableView deleteRowsAtIndexPaths:@[indexPath] withRowAnimation:UITableViewRowAnimationFade];
+        //        [self.tableView reloadData];
         
     }
     

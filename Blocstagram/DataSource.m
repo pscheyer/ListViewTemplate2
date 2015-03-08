@@ -21,6 +21,7 @@
 
 @property (nonatomic, assign) BOOL isRefreshing; //like Sprite!
 @property (nonatomic, assign) BOOL isLoadingOlderItems; //like... our thing that was like sprite!
+@property (nonatomic, assign) BOOL thereAreNoMoreOlderMessages;
 
 @end
 
@@ -56,108 +57,11 @@
         self.accessToken = note.object;
         
         //got a token, populate the initial data
-        [self populateDataWithParameters:nil];
+        [self populateDataWithParameters:nil completionHandler:nil];
     }];
 }
 
-#pragma mark Generative Code- commented out
 
-//- (void) addRandomData {
-//    NSMutableArray *randomMediaItem = [NSMutableArray array];
-//    
-//    for(int i = 1; i <= 10; i++) {
-//        NSString *imageName = [NSString stringWithFormat:@"%d.jpg", i];
-//        UIImage *image = [UIImage imageNamed:imageName];
-//        
-//        if(image) {
-//            Media *media = [[Media alloc] init];
-//            media.user = [self randomUser];
-//            media.image = image;
-//            
-//            NSUInteger commentCount = arc4random_uniform(10);
-//            NSMutableArray *randomComments = [NSMutableArray array];
-//            
-//            for (int i = 0; i <= commentCount; i++) {
-//                Comment *randomComment = [self randomComment];
-//                [randomComments addObject:randomComment];
-//            }
-//            
-//            media.comments = randomComments;
-//            
-//            [randomMediaItem addObject:media];
-//        }
-//    }
-//    
-//    
-//    self.mediaItems = randomMediaItem;
-//}
-//
-//-(User *) randomUser {
-//    User *user = [[User alloc] init];
-//    
-//    user.userName = [self randomStringOfLength:arc4random_uniform(10)];
-//    
-//    NSString *firstName = [self randomStringOfLength:arc4random_uniform(7)];
-//    NSString *lastName = [self randomStringOfLength:arc4random_uniform(12)];
-//    user.fullName = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
-//    
-//    return user;
-//}
-//
-//-(Comment *) randomComment {
-//    Comment *comment = [[Comment alloc] init];
-//    
-//    comment.from = [self randomUser];
-//    
-//    NSUInteger wordCount = arc4random_uniform(20);
-//    
-//    NSMutableString *randomSentence = [[NSMutableString alloc] init];
-//    
-//    for (int i = 0; i <= wordCount; i++) {
-//        NSString *randomWord = [self randomStringOfLength:arc4random_uniform(12)];
-//        [randomSentence appendFormat:@"%@ ", randomWord];
-//    }
-//    
-//    comment.text = randomSentence;
-//    
-//    return comment;
-//}
-//
-//- (NSString *) randomSentenceWithMaximumNumberOfWords:(NSUInteger) len {
-//    NSString *sentence = [[NSString alloc] init];
-//    
-//    NSUInteger wordCount = arc4random_uniform(20);
-//    
-//    NSMutableString *randomSentence = [[NSMutableString alloc] init];
-//    
-//    for (int i = 0; i <= wordCount; i++) {
-//        NSString *randomWord = [self randomStringOfLength:arc4random_uniform(12)];
-//        [randomSentence appendFormat:@"%@ ", randomWord];
-//    }
-//    
-//    sentence = randomSentence;
-//    
-//    return sentence;
-//}
-//
-//- (NSString *) randomStringOfLength:(NSUInteger) len {
-//    NSString *alphabet = @"abcdefghijklmnopqrstuvwxyz";
-//    
-//    NSMutableString *s = [NSMutableString string];
-//    for (NSUInteger i = 0U; i < len; i++) {
-//        u_int32_t r = arc4random_uniform((u_int32_t)[alphabet length]);
-//        unichar c = [alphabet characterAtIndex:r];
-//        [s appendFormat:@"%C", c];
-//    }
-//    return [NSString stringWithString:s];
-//}
-
-//- (void) removeDataAtRow:(NSUInteger) row {
-//    NSMutableArray *arrayWithoutMediaItem = [[NSMutableArray alloc] initWithArray:_mediaItems];
-//    [arrayWithoutMediaItem removeObjectAtIndex:row];
-//    
-//    self.mediaItems = arrayWithoutMediaItem;
-//}
 
 
 #pragma mark - Key/Value Observing
@@ -195,53 +99,42 @@
 #pragma mark pull-to-refresh and inifinite scroll
 
 - (void) requestNewItemsWithCompletionHandler:(NewItemCompletionBlock)completionHandler {
+    self.thereAreNoMoreOlderMessages = NO;
     if (self.isRefreshing == NO) { //YOU HAVE YOUR SPRITE ALREADY, SIR
         self.isRefreshing = YES;
-        //Generative Code calls
-//        Media *media = [[Media alloc] init];
-//        media.user = [self randomUser];
-//        media.image = [UIImage imageNamed:@"10.jpg"];
-//        media.caption = [self randomSentenceWithMaximumNumberOfWords:7];
-//        
-//        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
-//        [mutableArrayWithKVO insertObject:media atIndex:0];
         
-        //adding images here
+        NSString *minID = [[self.mediaItems firstObject] idNumber];
+        NSDictionary *parameters = @{@"min_id": minID};
         
-        self.isRefreshing = NO;
-        
-        if (completionHandler) {
-            completionHandler(nil);
-        }
+        [self populateDataWithParameters:parameters completionHandler:^(NSError *error) {
+            self.isRefreshing = NO;
+            
+            if (completionHandler) {
+                completionHandler(error);
+            }
+        }];
     }
 }
 
 - (void) requestOldItemsWithCompletionHandler:(NewItemCompletionBlock)completionHandler {
-    if (self.isLoadingOlderItems == NO) { //YOU HAVE YOUR THING SIMILAR TO OUR THING LIKE SPRITE ALREADY SIR DON'T PUSH ME
+    if (self.isLoadingOlderItems == NO && self.thereAreNoMoreOlderMessages == NO) { //YOU HAVE YOUR THING SIMILAR TO OUR THING LIKE SPRITE ALREADY SIR DON'T PUSH ME
         self.isLoadingOlderItems = YES;
         
-        //generative code calls
-//        Media *media = [[Media alloc] init];
-//        media.user = [self randomUser];
-//        media.image = [UIImage imageNamed:@"1.jpg"];
-//        media.caption = [self randomSentenceWithMaximumNumberOfWords:7];
-//        
-//        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
-//        [mutableArrayWithKVO addObject:media];
-//
-        
-        //adding images here
+        NSString *maxID = [[self.mediaItems lastObject] idNumber];
+        NSDictionary *parameters = @{@"max_id": maxID};
         
         
-        self.isLoadingOlderItems = NO;
-        
-        if (completionHandler) {
-            completionHandler(nil);
-        }
+        [self populateDataWithParameters:parameters completionHandler:^(NSError *error) {
+            self.isLoadingOlderItems = NO;
+            
+            if (completionHandler) {
+                completionHandler(error);
+            }
+        }];
     }
 }
 
-- (void) populateDataWithParameters:(NSDictionary *)parameters {
+- (void) populateDataWithParameters:(NSDictionary *)parameters completionHandler:(NewItemCompletionBlock)completionHandler {
     if (self.accessToken) {
         //only try to get the data if there's an access token
         
@@ -264,13 +157,26 @@
                 NSError *webError;
                 NSData *responseData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&webError];
                 
-                NSError *jsonError;
-                NSDictionary *feedDictionary = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&jsonError];
-                
-                if (feedDictionary) {
+                if(responseData) {
+                    NSError *jsonError;
+                    NSDictionary *feedDictionary = [NSJSONSerialization JSONObjectWithData:responseData options:0 error:&jsonError];
+                    
+                    if (feedDictionary) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            //done networking, go back on the main thread
+                            [self parseDataFromFeedDictionary:feedDictionary fromRequestWithParameters:parameters];
+                            if (completionHandler) {
+                                completionHandler(nil);
+                            }
+                        });
+                    } else if (completionHandler) {
+                        dispatch_async(dispatch_get_main_queue(), ^{
+                            completionHandler(jsonError);
+                        });
+                    }
+                } else if (completionHandler) {
                     dispatch_async(dispatch_get_main_queue(), ^{
-                        //done networking, go back to main thread
-                        [self parseDataFromFeedDictionary:feedDictionary fromRequestWithParameters:parameters];
+                        completionHandler(webError);
                     });
                 }
             }
@@ -278,9 +184,176 @@
     }
 }
 
+#pragma mark Parser for JSON from Instagram
+
 - (void) parseDataFromFeedDictionary:(NSDictionary *) feedDictionary fromRequestWithParameters:(NSDictionary *)parameters {
-    NSLog(@"%@", feedDictionary);
+    NSArray *mediaArray = feedDictionary[@"data"];
+    
+    NSMutableArray *tmpMediaItems = [NSMutableArray array];
+    
+    for (NSDictionary *mediaDictionary in mediaArray) {
+        Media *mediaItem = [[Media alloc] initWithDictionary:mediaDictionary];
+        
+        if (mediaItem) {
+            [tmpMediaItems addObject:mediaItem];
+            [self downloadImageForMediaItem:mediaItem];
+        }
+    }
+    
+    NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+    
+    if (parameters[@"min_id"]) {
+        //this was a pull-to-refresh request
+        
+        NSRange rangeOfIndexes = NSMakeRange(0, tmpMediaItems.count);
+        NSIndexSet *indexSetOfNewObjects = [NSIndexSet indexSetWithIndexesInRange:rangeOfIndexes];
+        
+        [mutableArrayWithKVO insertObjects:tmpMediaItems atIndexes:indexSetOfNewObjects];
+        
+    }else if (parameters[@"max_id"]) {
+        //this was an infinite scroll request
+        
+        if (tmpMediaItems.count == 0) {
+            //disable infinite scroll as there are no more older messages
+            self.thereAreNoMoreOlderMessages = YES;
+        }
+        NSLog(@"infinite scroll loading");
+        [mutableArrayWithKVO addObjectsFromArray:tmpMediaItems];
+        
+        
+    } else {
+        [self willChangeValueForKey:@"mediaItems"];
+        self.mediaItems = tmpMediaItems;
+        [self didChangeValueForKey:@"mediaItems"];
+    }
 }
+
+- (void) downloadImageForMediaItem:(Media *)mediaItem {
+    if  (mediaItem.mediaURL && !mediaItem.image) {
+        dispatch_async(dispatch_get_global_queue(DISPATCH_QUEUE_PRIORITY_DEFAULT, 0), ^{
+            NSURLRequest *request = [NSURLRequest requestWithURL:mediaItem.mediaURL];
+            
+            NSURLResponse *response;
+            NSError *error;
+            NSData *imageData = [NSURLConnection sendSynchronousRequest:request returningResponse:&response error:&error];
+            
+            if (imageData) {
+                UIImage *image = [UIImage imageWithData:imageData];
+                
+                if(image) {
+                    mediaItem.image = image;
+                    
+                    dispatch_async(dispatch_get_main_queue(), ^{
+                        NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
+                        NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
+                        [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
+                    });
+                }
+            } else {
+                NSLog(@"Error downloading image: %@", error);
+            }
+        });
+    }
+}
+
+#pragma mark Generative Code- commented out
+
+//- (void) addRandomData {
+//    NSMutableArray *randomMediaItem = [NSMutableArray array];
+//
+//    for(int i = 1; i <= 10; i++) {
+//        NSString *imageName = [NSString stringWithFormat:@"%d.jpg", i];
+//        UIImage *image = [UIImage imageNamed:imageName];
+//
+//        if(image) {
+//            Media *media = [[Media alloc] init];
+//            media.user = [self randomUser];
+//            media.image = image;
+//
+//            NSUInteger commentCount = arc4random_uniform(10);
+//            NSMutableArray *randomComments = [NSMutableArray array];
+//
+//            for (int i = 0; i <= commentCount; i++) {
+//                Comment *randomComment = [self randomComment];
+//                [randomComments addObject:randomComment];
+//            }
+//
+//            media.comments = randomComments;
+//
+//            [randomMediaItem addObject:media];
+//        }
+//    }
+//
+//
+//    self.mediaItems = randomMediaItem;
+//}
+//
+//-(User *) randomUser {
+//    User *user = [[User alloc] init];
+//
+//    user.userName = [self randomStringOfLength:arc4random_uniform(10)];
+//
+//    NSString *firstName = [self randomStringOfLength:arc4random_uniform(7)];
+//    NSString *lastName = [self randomStringOfLength:arc4random_uniform(12)];
+//    user.fullName = [NSString stringWithFormat:@"%@ %@", firstName, lastName];
+//
+//    return user;
+//}
+//
+//-(Comment *) randomComment {
+//    Comment *comment = [[Comment alloc] init];
+//
+//    comment.from = [self randomUser];
+//
+//    NSUInteger wordCount = arc4random_uniform(20);
+//
+//    NSMutableString *randomSentence = [[NSMutableString alloc] init];
+//
+//    for (int i = 0; i <= wordCount; i++) {
+//        NSString *randomWord = [self randomStringOfLength:arc4random_uniform(12)];
+//        [randomSentence appendFormat:@"%@ ", randomWord];
+//    }
+//
+//    comment.text = randomSentence;
+//
+//    return comment;
+//}
+//
+//- (NSString *) randomSentenceWithMaximumNumberOfWords:(NSUInteger) len {
+//    NSString *sentence = [[NSString alloc] init];
+//
+//    NSUInteger wordCount = arc4random_uniform(20);
+//
+//    NSMutableString *randomSentence = [[NSMutableString alloc] init];
+//
+//    for (int i = 0; i <= wordCount; i++) {
+//        NSString *randomWord = [self randomStringOfLength:arc4random_uniform(12)];
+//        [randomSentence appendFormat:@"%@ ", randomWord];
+//    }
+//
+//    sentence = randomSentence;
+//
+//    return sentence;
+//}
+//
+//- (NSString *) randomStringOfLength:(NSUInteger) len {
+//    NSString *alphabet = @"abcdefghijklmnopqrstuvwxyz";
+//
+//    NSMutableString *s = [NSMutableString string];
+//    for (NSUInteger i = 0U; i < len; i++) {
+//        u_int32_t r = arc4random_uniform((u_int32_t)[alphabet length]);
+//        unichar c = [alphabet characterAtIndex:r];
+//        [s appendFormat:@"%C", c];
+//    }
+//    return [NSString stringWithString:s];
+//}
+
+//- (void) removeDataAtRow:(NSUInteger) row {
+//    NSMutableArray *arrayWithoutMediaItem = [[NSMutableArray alloc] initWithArray:_mediaItems];
+//    [arrayWithoutMediaItem removeObjectAtIndex:row];
+//
+//    self.mediaItems = arrayWithoutMediaItem;
+//}
 
 
 

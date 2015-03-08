@@ -50,12 +50,12 @@ NSString *const LoginViewControllerDidGetAccessTokenNotification = @"LoginViewCo
 - (void) viewWillLayoutSubviews {
     [super viewWillLayoutSubviews];
     
-    static const CGFloat itemHeight = 50;
+//    static const CGFloat itemHeight = 50;
     CGFloat width = CGRectGetWidth(self.view.bounds);
-    CGFloat browserHeight = CGRectGetHeight(self.view.bounds) - itemHeight;
+    CGFloat browserHeight = CGRectGetHeight(self.view.bounds) ;
     
     self.webView.frame = CGRectMake(0,0, width, browserHeight);
-    self.homeButton.frame = CGRectMake(0, CGRectGetMaxY(self.webView.frame), width, itemHeight);
+//    self.homeButton.frame = CGRectMake(0, CGRectGetMaxY(self.webView.frame), width, itemHeight);
 
 
 }
