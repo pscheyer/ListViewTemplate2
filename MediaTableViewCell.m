@@ -152,7 +152,7 @@ static NSParagraphStyle *paragraphStyle;
     self.usernameAndCaptionLabel.attributedText = [self usernameAndCaptionString];
     self.commentLabel.attributedText = [self commentString];
     
-    
+
     if (_mediaItem.image) {
         self.imageHeightConstraint.constant = self.mediaItem.image.size.height / self.mediaItem.image.size.width * CGRectGetWidth(self.contentView.bounds);
     } else {
@@ -168,6 +168,8 @@ static NSParagraphStyle *paragraphStyle;
     
     layoutCell.mediaItem = mediaItem;
     
+//    CGFloat cellHeight = CGRectGetHeight(layoutCell.frame) + CGRectGetHeight(layoutCell.commentLabel.frame);
+    
     layoutCell.frame = CGRectMake(0, 0, width, CGRectGetHeight(layoutCell.frame));
     
     [layoutCell setNeedsLayout];
@@ -176,8 +178,8 @@ static NSParagraphStyle *paragraphStyle;
     
     
     //get the actual height required for the cell
-    //    CGFloat outputHeight = CGRectGetMaxY(layoutCell.commentLabel.frame) + CGRectGetMaxY(layoutCell.usernameAndCaptionLabel.frame);
-    //    return outputHeight;
+//        CGFloat outputHeight = CGRectGetMaxY(layoutCell.commentLabel.frame) + 20;
+//        return outputHeight;
     
     return CGRectGetMaxY(layoutCell.commentLabel.frame);
 }

@@ -43,18 +43,24 @@
     
     [self.tableView registerClass:[MediaTableViewCell class] forCellReuseIdentifier:@"mediaCell"];
     
+    if ([DataSource sharedInstance].mediaItems != nil) {
+        [[DataSource sharedInstance] requestNewItemsWithCompletionHandler:nil];
+        NSLog(@"Cache found, checking for new images...");
+    }
+    
     
 }
 
 - (void) refreshControlDidFire:(UIRefreshControl *) sender {
     [[DataSource sharedInstance] requestNewItemsWithCompletionHandler:^(NSError *error) {
         [sender endRefreshing];
+        NSLog(@"Pull-to-refresh triggered...");
     }];
 }
 
 - (void) infiniteScrollIfNecessary {
     NSIndexPath *bottomIndexPath = [[self.tableView indexPathsForVisibleRows] lastObject];
-    NSLog(@"Scroll...");
+//    NSLog(@"Scroll...");
     if (bottomIndexPath && bottomIndexPath.row == [DataSource sharedInstance].mediaItems.count - 1) {
         //the very last cell is on-screen
         [[DataSource sharedInstance] requestOldItemsWithCompletionHandler:nil];
