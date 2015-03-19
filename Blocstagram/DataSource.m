@@ -232,7 +232,7 @@
         if (mediaItem) {
             [tmpMediaItems addObject:mediaItem];
             //this next line procs the error requested in the assignment if commented and pull to refresh is run twice.
-            [self downloadImageForMediaItem:mediaItem];
+//            [self downloadImageForMediaItem:mediaItem];
         }
     }
     
@@ -284,17 +284,41 @@
 
 - (void) downloadImageForMediaItem:(Media *)mediaItem {
     if  (mediaItem.mediaURL && !mediaItem.image) {
+        mediaItem.downloadState = MediaDownloadStateDownloadInProgress;
 
         [self.instagramOperationManager GET:mediaItem.mediaURL.absoluteString
                                  parameters:nil success:^(AFHTTPRequestOperation *operation, id responseObject) {
                                      if ([responseObject isKindOfClass:[UIImage class]]) {
                                          mediaItem.image = responseObject;
+                                         mediaItem.downloadState = MediaDownloadStateHasImage;
                                          NSMutableArray *mutableArrayWithKVO = [self mutableArrayValueForKey:@"mediaItems"];
                                          NSUInteger index = [mutableArrayWithKVO indexOfObject:mediaItem];
                                          [mutableArrayWithKVO replaceObjectAtIndex:index withObject:mediaItem];
+                                     } else {
+                                         mediaItem.downloadState = MediaDownloadStateNonRecoverableError;
                                      }
                                  }failure:^(AFHTTPRequestOperation *operation, NSError *error) {
                                      NSLog(@"Error downloading image: %@", error);
+                                     
+                                     
+                                     mediaItem.downloadState = MediaDownloadStateNonRecoverableError;
+                                     
+                                     if ([error.domain isEqualToString:NSURLErrorDomain]){
+                                         //a networking problem has occurred
+                                         if (error.code == NSURLErrorTimedOut ||
+                                             error.code == NSURLErrorCancelled ||
+                                             error.code == NSURLErrorCannotConnectToHost||
+                                             error.code == NSURLErrorNetworkConnectionLost ||
+                                             error.code == NSURLErrorNotConnectedToInternet ||
+                                             error.code == kCFURLErrorInternationalRoamingOff ||
+                                             error.code == kCFURLErrorCallIsActive ||
+                                             error.code == kCFURLErrorDataNotAllowed ||
+                                             error.code == kCFURLErrorRequestBodyStreamExhausted) {
+                                             
+                                             //it might work if we try agaime
+                                             mediaItem.downloadState = MediaDownloadStateNeedsImage;
+                                         }
+                                     }
                                  }];
         
     }
