@@ -20,6 +20,7 @@
 
 @property (nonatomic, weak) UIImageView *lastTappedImageView;
 
+
 @end
 
 @implementation ImagesTableViewController
@@ -243,6 +244,11 @@
     }
 }
 
+- (void) cell:(MediaTableViewCell *)cell didTwoFingerTapImageView:(UIImageView *)imageView {
+
+    [[DataSource sharedInstance] downloadImageForMediaItem:cell.mediaItem];
+}
+
 
 #pragma mark - UIViewControllerTransitioningDelegate
 
@@ -260,4 +266,12 @@
     return animator;
 }
 
+
+
+
+//
+//    
+//    
+
+//}
 @end
