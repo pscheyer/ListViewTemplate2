@@ -12,7 +12,7 @@
 
 @interface MediaFullScreenViewController () <UIScrollViewDelegate>
 
-@property (nonatomic, strong) Media *media;
+
 @property (nonatomic, strong) UITapGestureRecognizer *tap;
 @property (nonatomic, strong) UITapGestureRecognizer *doubletap;
 @property (nonatomic, strong) UIButton *shareButton;
@@ -77,12 +77,19 @@
 - (void) viewWillLayoutSubviews {
     
     [super viewWillLayoutSubviews];
-    
     self.shareButton.frame = CGRectMake(0, 0, self.scrollView.frame.size.width, 30);
     self.scrollView.frame = CGRectMake(0, self.shareButton.frame.size.height, self.view.bounds.size.width, self.view.bounds.size.height);
+
     
+    [self recalculateZoomScale];
+}
+
+-(void) recalculateZoomScale {
     CGSize scrollViewFrameSize = self.scrollView.frame.size;
     CGSize scrollViewContentSize = self.scrollView.contentSize;
+    
+    scrollViewContentSize.height /= self.scrollView.zoomScale;
+    scrollViewContentSize.width /= self.scrollView.zoomScale;
     
     CGFloat scaleWidth = scrollViewFrameSize.width / scrollViewContentSize.width;
     CGFloat scaleHeight = scrollViewFrameSize.height / scrollViewContentSize.height;
@@ -90,6 +97,7 @@
     
     self.scrollView.minimumZoomScale = minScale/1.1;
     self.scrollView.maximumZoomScale = 2;
+    
 
     
 }

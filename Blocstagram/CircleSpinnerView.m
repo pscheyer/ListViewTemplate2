@@ -26,7 +26,7 @@
         _circleLayer = [CAShapeLayer layer];
         _circleLayer.contentsScale = [[UIScreen mainScreen] scale];
         _circleLayer.frame = rect;
-        _circleLayer.fillColor = [UIColor grayColor].CGColor;
+        _circleLayer.fillColor = [UIColor clearColor].CGColor;
         _circleLayer.strokeColor = self.strokeColor.CGColor;
         _circleLayer.lineWidth = self.strokeThickness;
         _circleLayer.lineCap = kCALineCapRound;
