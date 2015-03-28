@@ -29,6 +29,7 @@
 		D384024B1A94C5C500309D85 /* Media.m in Sources */ = {isa = PBXBuildFile; fileRef = D384024A1A94C5C500309D85 /* Media.m */; };
 		D384024E1A94C78500309D85 /* Comment.m in Sources */ = {isa = PBXBuildFile; fileRef = D384024D1A94C78500309D85 /* Comment.m */; };
 		D38402511A94C87D00309D85 /* DataSource.m in Sources */ = {isa = PBXBuildFile; fileRef = D38402501A94C87D00309D85 /* DataSource.m */; };
+		D38737791AC4AF97002707DF /* UserTests.m in Sources */ = {isa = PBXBuildFile; fileRef = D38737781AC4AF97002707DF /* UserTests.m */; };
 		D3909F3E1ABC9F710037CC2B /* CircleSpinnerView.m in Sources */ = {isa = PBXBuildFile; fileRef = D3909F3D1ABC9F710037CC2B /* CircleSpinnerView.m */; };
 		D3909F411ABCAA730037CC2B /* LikeButton.m in Sources */ = {isa = PBXBuildFile; fileRef = D3909F401ABCAA730037CC2B /* LikeButton.m */; };
 		D3909F441ABDFDDA0037CC2B /* ComposeCommentView.m in Sources */ = {isa = PBXBuildFile; fileRef = D3909F431ABDFDDA0037CC2B /* ComposeCommentView.m */; };
@@ -91,6 +92,7 @@
 		D384024D1A94C78500309D85 /* Comment.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = Comment.m; sourceTree = "<group>"; };
 		D384024F1A94C87D00309D85 /* DataSource.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = DataSource.h; sourceTree = "<group>"; };
 		D38402501A94C87D00309D85 /* DataSource.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = DataSource.m; sourceTree = "<group>"; };
+		D38737781AC4AF97002707DF /* UserTests.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = UserTests.m; sourceTree = "<group>"; };
 		D3909F3C1ABC9F710037CC2B /* CircleSpinnerView.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = CircleSpinnerView.h; sourceTree = "<group>"; };
 		D3909F3D1ABC9F710037CC2B /* CircleSpinnerView.m */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.objc; path = CircleSpinnerView.m; sourceTree = "<group>"; };
 		D3909F3F1ABCAA730037CC2B /* LikeButton.h */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.c.h; path = LikeButton.h; sourceTree = "<group>"; };
@@ -244,6 +246,7 @@
 			children = (
 				D30887E71A90E94600B4C8A1 /* BlocstagramTests.m */,
 				D30887E51A90E94600B4C8A1 /* Supporting Files */,
+				D38737781AC4AF97002707DF /* UserTests.m */,
 			);
 			path = BlocstagramTests;
 			sourceTree = "<group>";
@@ -324,6 +327,7 @@
 				TargetAttributes = {
 					D30887C71A90E94600B4C8A1 = {
 						CreatedOnToolsVersion = 6.1.1;
+						DevelopmentTeam = NCUF3YN8RF;
 					};
 					D30887E01A90E94600B4C8A1 = {
 						CreatedOnToolsVersion = 6.1.1;
@@ -446,6 +450,7 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				D38737791AC4AF97002707DF /* UserTests.m in Sources */,
 				D30887E81A90E94600B4C8A1 /* BlocstagramTests.m in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -557,6 +562,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Blocstagram/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				New_Setting = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Debug;
@@ -568,6 +574,7 @@
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				INFOPLIST_FILE = Blocstagram/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
+				New_Setting = "";
 				PRODUCT_NAME = "$(TARGET_NAME)";
 			};
 			name = Release;

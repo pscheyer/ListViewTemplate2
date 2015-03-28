@@ -1,0 +1,84 @@
+{\rtf1\ansi\ansicpg1252\cocoartf1344\cocoasubrtf720
+{\fonttbl\f0\fswiss\fcharset0 ArialMT;}
+{\colortbl;\red255\green255\blue255;\red26\green26\blue26;}
+\margl1440\margr1440\vieww12800\viewh6160\viewkind0
+\deftab720
+\pard\pardeftab720
+
+\f0\fs48 \cf2 \expnd0\expndtw0\kerning0
+20150326 2345qtime 1545CST Bloc section 42- Blocstagram- Writing Unit Tests\
+\
+Unit Testing! One of those administrative tasks that most coders hate which piques my interest as a probable area for disruption and improvement.\
+\
+Unit tests automatically test that another chunk of code works. They ensure the long-term stability of an app. If you're adding new features you want to be sure they won't break the old ones. If they do, it's known as a regression. The amount of code covered by automated tests is called the test coverage. \
+\
+There are other ways of automated testing your code- automated code auditing tests style and makeup conventions, automated functional testing runs the app on a simulator and steps through features as a user would, \
+\
+My XCode update just finished. Pause!\
+\
+And we're back. Automated stress testing lets you see how your app performs in high stress scenarios.\
+\
+UserTests, a subclass of XCTestCase. SetUp runs before each test, tearDown runs after each test, all methods beginning with test are tests and will run once each, other methods are ignored unless you call them.\
+\
+We'll test out the User initializer. \
+\
+Our method makes an NSDictionary that mimics the relevant portion of the response from the instagram API. This dictionary is passed to [User -initWithDictionary:]. After the user is created we assert that the testUser's four properties are what we expect them to be. If the assertions are false the test fails. If they're true the test passes. \
+\
+Another one for Comment.\
+\
+We're using XCTAssertEqualObjects which sends an isEqual. There are lots of other ones.\
+\
+Most people who use unit tests are proponents of test-driven development, in which you change up from our development style.\
+\
+We made a public interface in the header, then the private interface and implementation in the .m.\
+\
+TDD has you write the public interface, the tests which will all fail, then the implementation until the tests pass. \
+\
+Holy crap the app is running on my ipod touch. It doesn't have a camera button though.\
+\
+See, the unit test caught something! how neat. On to the assignments.\
+\
+\pard\pardeftab720
+\cf2 \expnd0\expndtw0\kerning0
+0038 \cf2 \expnd0\expndtw0\kerning0
+End video 1 \
+\
+20150327 0139 start video 2- assignment\
+The assignment for this section is to write a unit test for Media's initializer, write a test that ensures ComposeCommentView -setText: sets isWritingComment to YES if there's text, and another test to make sure it sets to NO if no text.\
+And write some tests to ensure MediaTableViewCell +heightForMediaItem:width returns accurate heights. \
+\
+These seem like a hassle but thinking about unit tests seems like a good thing to do, so we're off to the races.\
+\
+Ah! Right. Media doesn't take a dictionary, media hands out dictionaries. Looks like media likes to have a user\
+end video 2 0216\
+Start video 3 20150328 2051h \
+\
+Lets take a look at these other classes we built tests for and see how those tests correspond to the class init function.\
+\
+Comment initWithDictionary assigns the idnumber, text, and from based on basic calls into the dictionary. We test that by assigning an id and a text. \
+For user, four attributes are assigned from the dictionary. The fourth is interesting to us- it starts by taking a string, making it into a url, and then assigning it to profilePictureURL.\
+Media is much more tricky. We could simply set the idnumber like we did wit the other ones. The input dictionary actually contains a user which is alloc'd and init'd into the self.user field. The dictionary also needs to contain an images, a standard resolution, and a url to be combined into a string and then formed into a url. \
+So. We got one item to work. We should be able to add the caption pretty easily as well. Caption works as well. or not\'85\
+\
+We'll have to initialize several parts of the incoming mediaDictionary- it's looking for a subdictionary as "user", for values for images, standard_resolution, and url, for a dictionary tagged 'caption,' and another called "comments". Also a bool called userhasliked. Lets go one step at a time starting with that thorny user. \
+\
+Okay. We just needed to pass in the sort of dictionary that looks right for user. Media auto inits a user out of it. We should be able to do the same thing for comment and caption.\
+\
+Not sure why this isn't working. testMedia.user should alloc/init a user with the same dictionary that testUser alloc/inits, and so testmedia.user and testuser should be equal.\
+\
+Well, i got the mediaURL to work\'85\
+\
+Yup, just no idea how to do this properly with dictionaries and user/comments. \
+\
+Ah. Comments is an array composed of the comments\'85\
+Pulled from mediaDictionary[@"comments"][@"data"], whereas our sourceDictionary provides the commentSourceDictionary directly under the sourceDictionary[@"comments"]. \
+\
+for real? what just happened. the [@"data"] tag needn't refer to anything at all? Whatever.\
+\
+The user needs to refer to the same user if i'm to assert equal objects. I really want to see if the dictionaries which comprise the users have identical values.\
+\
+Weird. Images won't work? But the rest is fine?\
+\
+Moving on to caption quickly\'85 Okay! time for some food then back to images. \
+2244h end video 3\
+}

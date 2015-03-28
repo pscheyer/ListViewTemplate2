@@ -21,7 +21,7 @@
         NSString *profileURLString = userDictionary[@"profile_picture"];
         NSURL *profileURL = [NSURL URLWithString:profileURLString];
         
-        if (profileURL ) {
+        if (profileURL) {
             self.profilePictureURL = profileURL;
         }
     }

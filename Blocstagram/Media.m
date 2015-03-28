@@ -53,7 +53,7 @@
         self.likeState = userHasLiked ? LikeStateLiked : LikeStateNotLiked;
         
     }
-    
+
     return self;
 }
 
